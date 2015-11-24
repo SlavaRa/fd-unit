@@ -9,18 +9,14 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
 {
     class TraceHandler : IEventHandler
     {
-        private PluginUI ui;
-
-        private ITraceMessageHandler implementation;
-
+        private readonly PluginUI ui;
+        private readonly ITraceMessageHandler implementation;
         private int lastLogIndex;
 
-        public TraceHandler(PluginUI pluginUI)
+        public TraceHandler(PluginUI pluginUi)
         {
-            ui = pluginUI;
-
-            implementation = new FlexUnitMessageHandler(pluginUI);
-
+            ui = pluginUi;
+            implementation = new FlexUnitMessageHandler(pluginUi);
             lastLogIndex = 0;
         }
 

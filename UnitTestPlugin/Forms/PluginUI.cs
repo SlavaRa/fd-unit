@@ -6,38 +6,36 @@ using System.Windows.Forms;
 using PluginCore;
 using PluginCore.FRService;
 using ScintillaNet;
-using TestExplorerPanel.Source;
 
 namespace TestExplorerPanel.Forms
 {
     public enum TestResult
     {
-        PASSED,
-        FAILED,
-        ERROR
+        Passed,
+        Failed,
+        Error
     }
 
     public struct TestInformation
     {
-        public string name;
-        public string functionName;
-        public string path;
-        public string tooltip;
-        public int line;
-        public TestResult result;
+        public string Name;
+        public string FunctionName;
+        public string Path;
+        public string Tooltip;
+        public int Line;
+        public TestResult Result;
     }
 
     public partial class PluginUI : DockPanelControl
     {
         #region Images Indexes Constants
 
-        private const int IMAGE_PASSED_INDEX = 0;
-        private const int IMAGE_ERROR_INDEX = 1;
-        private const int IMAGE_FAILED_INDEX = 2;
+        private const int ImagePassedIndex = 0;
+        private const int ImageErrorIndex = 1;
+        private const int ImageFailedIndex = 2;
 
         #endregion
 
-        private PluginMain main;
         private ImageList imageList;
 
         private int totalPassed;
@@ -46,10 +44,8 @@ namespace TestExplorerPanel.Forms
 
         private string runTime;
 
-        public PluginUI(PluginMain main)
+        public PluginUI()
         {
-            this.main = main;
-
             totalPassed = 0;
             totalFailed = 0;
             totalError = 0;
@@ -108,13 +104,13 @@ namespace TestExplorerPanel.Forms
 
         public void AddTest(TestInformation info)
         {
-            TreeNode node = GetNode(info.name);
-            node.ToolTipText = info.tooltip;
+            TreeNode node = GetNode(info.Name);
+            node.ToolTipText = info.Tooltip;
             node.Tag = info;
 
-            SetStyleBasedOnResult(node, info.result);
+            SetStyleBasedOnResult(node, info.Result);
 
-            AddTestResultToStatistics(info.result);
+            AddTestResultToStatistics(info.Result);
         }
 
         public void SetRunTime(string time)
@@ -129,35 +125,35 @@ namespace TestExplorerPanel.Forms
 
         public void SetTestPathAndLine(TestInformation testInfo)
         {
-            testInfo.name = testInfo.name.Replace('/', '.');
+            testInfo.Name = testInfo.Name.Replace('/', '.');
 
-            TreeNode testNode = GetNode(testInfo.name);
+            TreeNode testNode = GetNode(testInfo.Name);
 
             TestInformation info = (TestInformation) testNode.Tag;
-            info.functionName = testInfo.functionName;
-            info.path = testInfo.path;
-            info.line = testInfo.line;
+            info.FunctionName = testInfo.FunctionName;
+            info.Path = testInfo.Path;
+            info.Line = testInfo.Line;
 
             testNode.Tag = info;
 
-            TreeNode errorNode = testNode.Nodes.Add(info.tooltip);
+            TreeNode errorNode = testNode.Nodes.Add(info.Tooltip);
 
-            SetStyleBasedOnResult(errorNode, info.result);
+            SetStyleBasedOnResult(errorNode, info.Result);
         }
 
         private void AddTestResultToStatistics(TestResult result)
         {
             switch (result)
             {
-                case TestResult.PASSED:
+                case TestResult.Passed:
                     totalPassed++;
                     break;
 
-                case TestResult.FAILED:
+                case TestResult.Failed:
                     totalFailed++;
                     break;
 
-                case TestResult.ERROR:
+                case TestResult.Error:
                     totalError++;
                     break;
             }
@@ -198,22 +194,22 @@ namespace TestExplorerPanel.Forms
         {
             switch (result)
             {
-                case TestResult.PASSED:
-                    node.ImageIndex = IMAGE_PASSED_INDEX;
-                    node.SelectedImageIndex = IMAGE_PASSED_INDEX;
+                case TestResult.Passed:
+                    node.ImageIndex = ImagePassedIndex;
+                    node.SelectedImageIndex = ImagePassedIndex;
                     node.ForeColor = Color.Green;
                     break;
 
-                case TestResult.FAILED:
-                    node.ImageIndex = IMAGE_FAILED_INDEX;
-                    node.SelectedImageIndex = IMAGE_FAILED_INDEX;
+                case TestResult.Failed:
+                    node.ImageIndex = ImageFailedIndex;
+                    node.SelectedImageIndex = ImageFailedIndex;
                     node.ForeColor = Color.Blue;
                     node.EnsureVisible();
                     break;
 
-                case TestResult.ERROR:
-                    node.ImageIndex = IMAGE_ERROR_INDEX;
-                    node.SelectedImageIndex = IMAGE_ERROR_INDEX;
+                case TestResult.Error:
+                    node.ImageIndex = ImageErrorIndex;
+                    node.SelectedImageIndex = ImageErrorIndex;
                     node.ForeColor = Color.Red;
                     node.EnsureVisible();
                     break;
@@ -237,38 +233,34 @@ namespace TestExplorerPanel.Forms
             {
                 info = (TestInformation) clickedNode.Tag;
             }
-            catch (InvalidCastException excpt)
+            catch (InvalidCastException)
             {
                 info = new TestInformation();
             }
-            catch (NullReferenceException excpt)
+            catch (NullReferenceException)
             {
                 info = new TestInformation();
             }
 
-            SelectTextOnFileLine(info.path, info.line, info.functionName);
+            SelectTextOnFileLine(info.Path, info.Line, info.FunctionName);
         }
 
         private void OnPluginUILoad(object sender, EventArgs e)
         {
             TestProgress.Value = 0;
-
             TestsTreeView.Nodes.Clear();
-
             UpdateProgress();
-
-            imageList = new ImageList();
-            imageList.ColorDepth = ColorDepth.Depth32Bit;
-            imageList.TransparentColor = Color.Transparent;
-
+            imageList = new ImageList
+            {
+                ColorDepth = ColorDepth.Depth32Bit,
+                TransparentColor = Color.Transparent
+            };
             imageList.Images.Add(PluginBase.MainForm.FindImage("32")); // passed
             imageList.Images.Add(PluginBase.MainForm.FindImage("197")); // error
             imageList.Images.Add(PluginBase.MainForm.FindImage("196")); // failed
-
             TestsTreeView.ImageList = imageList;
-
-            ErrorsLabel.Image = imageList.Images[IMAGE_ERROR_INDEX];
-            FailuresLabel.Image = imageList.Images[IMAGE_FAILED_INDEX];
+            ErrorsLabel.Image = imageList.Images[ImageErrorIndex];
+            FailuresLabel.Image = imageList.Images[ImageFailedIndex];
         }
 
         #endregion
@@ -292,11 +284,12 @@ namespace TestExplorerPanel.Forms
 
         private List<SearchMatch> GetResults(ScintillaControl sci, string text)
         {
-            string pattern = text;
-            FRSearch search = new FRSearch(pattern);
-            search.Filter = SearchFilter.OutsideCodeComments;
-            search.NoCase = true;
-            search.WholeWord = true;
+            FRSearch search = new FRSearch(text)
+            {
+                Filter = SearchFilter.OutsideCodeComments,
+                NoCase = true,
+                WholeWord = true
+            };
             return search.Matches(sci.Text);
         }
 

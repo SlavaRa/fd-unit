@@ -5,11 +5,11 @@ namespace TestExplorerPanel.Source.Handlers
 {
     class ProcessEventHandler : IEventHandler
     {
-        private PluginUI ui;
+        private readonly PluginUI ui;
 
-        public ProcessEventHandler(PluginUI pluginUI)
+        public ProcessEventHandler(PluginUI pluginUi)
         {
-            ui = pluginUI;
+            ui = pluginUi;
         }
 
         public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)

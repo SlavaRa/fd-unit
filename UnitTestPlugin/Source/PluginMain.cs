@@ -40,25 +40,10 @@ namespace TestExplorerPanel.Source
 {
     public class PluginMain : IPlugin
     {
-        #region IPlugin Constants
-
-        public int api = 1;
-        public string name = "UnitTests";
-        public string guid = "93C76C98-D991-4F19-99EE-6188D7E534E2";
-        public string help = "www.flashdevelop.org/community/";
-        public string description = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
-        public string author = "Gustavo S. Wolff";
-
-        public string settingsFilename;
-
-        #endregion
-
+        private string settingsFilename;
         private PluginUI ui;
-
         private Image image;
-
         private DockContent panel;
-
         private IEventHandler processHandler;
         private IEventHandler traceHandler;
         private IEventHandler commandHandler;
@@ -67,32 +52,29 @@ namespace TestExplorerPanel.Source
 
         public int Api
         {
-            get { return api; }
+            get { return 1; }
         }
 
         public string Author
         {
-            get { return author; }
+            get { return "Gustavo S. Wolff"; }
         }
 
-        public string Description
-        {
-            get { return description; }
-        }
+        public string Description { get; private set; } = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
 
         public string Guid
         {
-            get { return guid; }
+            get { return "93C76C98-D991-4F19-99EE-6188D7E534E2"; }
         }
 
         public string Help
         {
-            get { return help; }
+            get { return "www.flashdevelop.org/community/"; }
         }
 
         public string Name
         {
-            get { return name; }
+            get { return "UnitTests"; }
         }
 
         public object Settings
@@ -128,44 +110,37 @@ namespace TestExplorerPanel.Source
         public void InitBasics()
         {
             string dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
-
-            if (!Directory.Exists(dataPath))
-                Directory.CreateDirectory(dataPath);
-
+            if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);
             settingsFilename = Path.Combine(dataPath, "Settings.fdb");
-
             image = PluginBase.MainForm.FindImage("101");
         }
 
         public void InitLocalization()
         {
             LocaleVersion language = PluginBase.MainForm.Settings.LocaleVersion;
-
             switch (language)
             {
                 case LocaleVersion.de_DE:
                 case LocaleVersion.eu_ES:
                 case LocaleVersion.ja_JP:
                 case LocaleVersion.zh_CN:
-
+                case LocaleVersion.en_US:
                 default:
                     LocalizationHelper.Initialize(LocaleVersion.en_US);
                     break;
             }
-
-            description = LocalizationHelper.GetString("Description");
+            Description = LocalizationHelper.GetString("Description");
         }
 
         public void CreatePluginPanel()
         {
-            ui = new PluginUI(this);
-            ui.Text = LocalizationHelper.GetString("PluginPanel");
+            ui = new PluginUI() {Text = LocalizationHelper.GetString("PluginPanel")};
 
-            panel = PluginBase.MainForm.CreateDockablePanel(ui, guid, image, DockState.DockRight);
+            panel = PluginBase.MainForm.CreateDockablePanel(ui, "93C76C98-D991-4F19-99EE-6188D7E534E2", image, DockState.DockRight);
 
             processHandler = new ProcessEventHandler(ui);
             traceHandler = new TraceHandler(ui);
-            commandHandler = new CommandHandler(ui);
+            commandHandler = new CommandHandler();
         }
 
         public void CreateMenuItem()
@@ -173,7 +148,7 @@ namespace TestExplorerPanel.Source
             string label = LocalizationHelper.GetString("ViewMenuItem");
 
             ToolStripMenuItem viewMenu = (ToolStripMenuItem) PluginBase.MainForm.FindMenuItem("ViewMenu");
-            ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, new EventHandler(OpenPanel));
+            ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, OpenPanel);
 
             viewMenu.DropDownItems.Add(newItem);
         }
