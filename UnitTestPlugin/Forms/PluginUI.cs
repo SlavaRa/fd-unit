@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
-
 using PluginCore;
 using PluginCore.FRService;
-using System.IO;
 using ScintillaNet;
+using TestExplorerPanel.Source;
 
-namespace UnitTestPlugin {
+namespace TestExplorerPanel.Forms {
 
     public enum TestResult {
         PASSED ,

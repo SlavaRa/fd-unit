@@ -7,8 +7,8 @@
     <ProjectGuid>{73292672-4278-4CDE-BBF1-A497A35B040B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitTestPlugin</RootNamespace>
-    <AssemblyName>UnitTestPlugin</AssemblyName>
+    <RootNamespace>TestExplorerPanel</RootNamespace>
+    <AssemblyName>TestExplorerPanel</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -50,9 +50,6 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="PluginCore">
       <HintPath>..\..\..\..\..\Program Files (x86)\FlashDevelop\PluginCore.dll</HintPath>

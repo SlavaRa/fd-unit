@@ -23,23 +23,20 @@ THE SOFTWARE.
 */
 
 using System;
-using System.IO;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using System.ComponentModel;
-
+using PluginCore;
+using PluginCore.Helpers;
+using PluginCore.Localization;
+using PluginCore.Managers;
+using TestExplorerPanel.Forms;
+using TestExplorerPanel.Source.Handlers;
+using TestExplorerPanel.Source.Handlers.MessageHandlers;
+using TestExplorerPanel.Source.Localization;
 using WeifenLuo.WinFormsUI.Docking;
 
-using PluginCore.Localization;
-using PluginCore.Utilities;
-using PluginCore.Managers;
-using PluginCore.Helpers;
-using PluginCore;
-
-using UnitTestPlugin.Model.Handlers;
-using UnitTestPlugin.Model.Localization;
-
-namespace UnitTestPlugin {
+namespace TestExplorerPanel.Source {
 
     public class PluginMain : IPlugin {
 
@@ -118,7 +115,7 @@ namespace UnitTestPlugin {
         #region Custom Methods
 
         public void InitBasics() {
-            String dataPath = Path.Combine( PathHelper.DataDir , "UnitTestPlugin" );
+            String dataPath = Path.Combine( PathHelper.DataDir , nameof(TestExplorerPanel));
 
             if ( !Directory.Exists( dataPath ) )
                 Directory.CreateDirectory( dataPath );

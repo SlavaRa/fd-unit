@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>Unit Test Plugin for Flash Develop 4</value>
+    <value>Test Explorer Panel Plugin for Flash Develop 5</value>
   </data>
   <data name="PluginPanel" xml:space="preserve">
-    <value>Unit Tests</value>
+    <value>Test Explorer Panel</value>
   </data>
   <data name="ViewMenuItem" xml:space="preserve">
-    <value>Unit Tests</value>
+    <value>Test Explorer Panel</value>
   </data>
 </root>
