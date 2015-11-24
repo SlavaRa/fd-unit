@@ -15,7 +15,7 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit
 
         public FlexUnitMessageHandler(PluginUI pluginUI)
         {
-            this.ui = pluginUI;
+            ui = pluginUI;
 
             testResultPattern = new Regex("([A-Z]{1}[A-Za-z0-9.]{5,}) ([.|F])$");
             testErrorPattern = new Regex("^[0-9]+ [a-zA-Z]*::([a-zA-Z0-9.]+) ([a-zA-Z0-9:<> ]+)");

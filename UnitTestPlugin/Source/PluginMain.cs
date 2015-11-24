@@ -106,18 +106,18 @@ namespace TestExplorerPanel.Source
 
         public void Initialize()
         {
-            this.InitBasics();
-            this.InitLocalization();
-            this.CreatePluginPanel();
-            this.CreateMenuItem();
-            this.AddEventHandlers();
+            InitBasics();
+            InitLocalization();
+            CreatePluginPanel();
+            CreateMenuItem();
+            AddEventHandlers();
         }
 
         public void Dispose()
         {
         }
 
-        public void HandleEvent(object sender, PluginCore.NotifyEvent e, PluginCore.HandlingPriority priority)
+        public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
         {
         }
 
@@ -132,9 +132,9 @@ namespace TestExplorerPanel.Source
             if (!Directory.Exists(dataPath))
                 Directory.CreateDirectory(dataPath);
 
-            this.settingsFilename = Path.Combine(dataPath, "Settings.fdb");
+            settingsFilename = Path.Combine(dataPath, "Settings.fdb");
 
-            this.image = PluginBase.MainForm.FindImage("101");
+            image = PluginBase.MainForm.FindImage("101");
         }
 
         public void InitLocalization()
@@ -153,19 +153,19 @@ namespace TestExplorerPanel.Source
                     break;
             }
 
-            this.description = LocalizationHelper.GetString("Description");
+            description = LocalizationHelper.GetString("Description");
         }
 
         public void CreatePluginPanel()
         {
-            this.ui = new PluginUI(this);
-            this.ui.Text = LocalizationHelper.GetString("PluginPanel");
+            ui = new PluginUI(this);
+            ui.Text = LocalizationHelper.GetString("PluginPanel");
 
-            this.panel = PluginBase.MainForm.CreateDockablePanel(this.ui, this.guid, this.image, DockState.DockRight);
+            panel = PluginBase.MainForm.CreateDockablePanel(ui, guid, image, DockState.DockRight);
 
-            this.processHandler = new ProcessEventHandler(ui);
-            this.traceHandler = new TraceHandler(ui);
-            this.commandHandler = new CommandHandler(ui);
+            processHandler = new ProcessEventHandler(ui);
+            traceHandler = new TraceHandler(ui);
+            commandHandler = new CommandHandler(ui);
         }
 
         public void CreateMenuItem()
@@ -173,7 +173,7 @@ namespace TestExplorerPanel.Source
             String label = LocalizationHelper.GetString("ViewMenuItem");
 
             ToolStripMenuItem viewMenu = (ToolStripMenuItem) PluginBase.MainForm.FindMenuItem("ViewMenu");
-            ToolStripMenuItem newItem = new ToolStripMenuItem(label, this.image, new EventHandler(this.OpenPanel));
+            ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, new EventHandler(OpenPanel));
 
             viewMenu.DropDownItems.Add(newItem);
         }
@@ -185,9 +185,9 @@ namespace TestExplorerPanel.Source
             EventManager.AddEventHandler(commandHandler, EventType.Command);
         }
 
-        public void OpenPanel(Object sender, System.EventArgs e)
+        public void OpenPanel(Object sender, EventArgs e)
         {
-            this.panel.Show();
+            panel.Show();
         }
 
         #endregion

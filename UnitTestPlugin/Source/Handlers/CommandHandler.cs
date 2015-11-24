@@ -9,10 +9,10 @@ namespace TestExplorerPanel.Source.Handlers
 
         public CommandHandler(PluginUI pluginUI)
         {
-            this.ui = pluginUI;
+            ui = pluginUI;
         }
 
-        public void HandleEvent(object sender, PluginCore.NotifyEvent e, PluginCore.HandlingPriority priority)
+        public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
         {
         }
     }

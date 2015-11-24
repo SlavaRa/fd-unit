@@ -63,7 +63,7 @@ namespace TestExplorerPanel.Forms
 
         public void BeginUpdate()
         {
-            this.TestsTreeView.Nodes.Clear();
+            TestsTreeView.Nodes.Clear();
 
             totalPassed = 0;
             totalFailed = 0;
@@ -71,12 +71,12 @@ namespace TestExplorerPanel.Forms
 
             runTime = "0";
 
-            this.TestsTreeView.BeginUpdate();
+            TestsTreeView.BeginUpdate();
         }
 
         public void EndUpdate()
         {
-            this.TestsTreeView.EndUpdate();
+            TestsTreeView.EndUpdate();
 
             UpdateProgress();
         }
@@ -85,20 +85,20 @@ namespace TestExplorerPanel.Forms
         {
             int totalTests = totalError + totalFailed + totalPassed;
 
-            this.RunsLabel.Text = "Runs: " + totalPassed + " / " + totalTests + " (" + runTime + "s)";
-            this.ErrorsLabel.Text = "Errors: " + totalError;
-            this.FailuresLabel.Text = "Failures: " + totalFailed;
+            RunsLabel.Text = "Runs: " + totalPassed + " / " + totalTests + " (" + runTime + "s)";
+            ErrorsLabel.Text = "Errors: " + totalError;
+            FailuresLabel.Text = "Failures: " + totalFailed;
 
             if (totalTests == 0)
             {
-                this.TestProgress.Value = 0;
+                TestProgress.Value = 0;
             }
             else
             {
-                this.TestProgress.Maximum = totalTests;
-                this.TestProgress.Minimum = 0;
+                TestProgress.Maximum = totalTests;
+                TestProgress.Minimum = 0;
 
-                this.TestProgress.Value = totalPassed;
+                TestProgress.Value = totalPassed;
             }
         }
 
@@ -119,7 +119,7 @@ namespace TestExplorerPanel.Forms
 
         public void SetRunTime(string time)
         {
-            this.runTime = time;
+            runTime = time;
         }
 
         public bool IsTesting(string name)
@@ -251,9 +251,9 @@ namespace TestExplorerPanel.Forms
 
         private void OnPluginUILoad(object sender, EventArgs e)
         {
-            this.TestProgress.Value = 0;
+            TestProgress.Value = 0;
 
-            this.TestsTreeView.Nodes.Clear();
+            TestsTreeView.Nodes.Clear();
 
             UpdateProgress();
 

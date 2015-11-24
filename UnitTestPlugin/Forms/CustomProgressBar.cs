@@ -9,7 +9,7 @@ namespace TestExplorerPanel.Forms
 
         public CustomProgressBar()
         {
-            this.SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.UserPaint, true);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -18,7 +18,7 @@ namespace TestExplorerPanel.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            foregroundBrush = new SolidBrush(this.ForeColor);
+            foregroundBrush = new SolidBrush(ForeColor);
 
             Rectangle drawArea = GetDrawArea();
 
@@ -33,7 +33,7 @@ namespace TestExplorerPanel.Forms
 
         private Rectangle GetDrawArea()
         {
-            return new Rectangle(0, 0, this.Width, this.Height);
+            return new Rectangle(0, 0, Width, Height);
         }
     }
 }

@@ -17,14 +17,14 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
 
         public TraceHandler(PluginUI pluginUI)
         {
-            this.ui = pluginUI;
+            ui = pluginUI;
 
             implementation = new FlexUnitMessageHandler(pluginUI);
 
             lastLogIndex = 0;
         }
 
-        public void HandleEvent(object sender, PluginCore.NotifyEvent e, PluginCore.HandlingPriority priority)
+        public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
         {
             switch (e.Type)
             {
