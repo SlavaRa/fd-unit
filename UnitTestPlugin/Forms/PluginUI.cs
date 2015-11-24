@@ -167,7 +167,7 @@ namespace TestExplorerPanel.Forms
 
         #region TreeNode Manipulation
 
-        private TreeNode GetNode(String name)
+        private TreeNode GetNode(string name)
         {
             string[] groups = name.Split('.');
 
@@ -275,7 +275,7 @@ namespace TestExplorerPanel.Forms
 
         #region Document Hightlight
 
-        private void SelectTextOnFileLine(string path, int line, String text)
+        private void SelectTextOnFileLine(string path, int line, string text)
         {
             if (!File.Exists(path))
                 return;
@@ -290,9 +290,9 @@ namespace TestExplorerPanel.Forms
             sci.AddHighlights(matches, 0xff0000);
         }
 
-        private List<SearchMatch> GetResults(ScintillaControl sci, String text)
+        private List<SearchMatch> GetResults(ScintillaControl sci, string text)
         {
-            String pattern = text;
+            string pattern = text;
             FRSearch search = new FRSearch(pattern);
             search.Filter = SearchFilter.OutsideCodeComments;
             search.NoCase = true;

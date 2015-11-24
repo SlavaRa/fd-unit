@@ -43,13 +43,13 @@ namespace TestExplorerPanel.Source
         #region IPlugin Constants
 
         public int api = 1;
-        public String name = "UnitTests";
-        public String guid = "93C76C98-D991-4F19-99EE-6188D7E534E2";
-        public String help = "www.flashdevelop.org/community/";
-        public String description = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
-        public String author = "Gustavo S. Wolff";
+        public string name = "UnitTests";
+        public string guid = "93C76C98-D991-4F19-99EE-6188D7E534E2";
+        public string help = "www.flashdevelop.org/community/";
+        public string description = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
+        public string author = "Gustavo S. Wolff";
 
-        public String settingsFilename;
+        public string settingsFilename;
 
         #endregion
 
@@ -70,32 +70,32 @@ namespace TestExplorerPanel.Source
             get { return api; }
         }
 
-        public String Author
+        public string Author
         {
             get { return author; }
         }
 
-        public String Description
+        public string Description
         {
             get { return description; }
         }
 
-        public String Guid
+        public string Guid
         {
             get { return guid; }
         }
 
-        public String Help
+        public string Help
         {
             get { return help; }
         }
 
-        public String Name
+        public string Name
         {
             get { return name; }
         }
 
-        public Object Settings
+        public object Settings
         {
             get { return settingsFilename; }
         }
@@ -127,7 +127,7 @@ namespace TestExplorerPanel.Source
 
         public void InitBasics()
         {
-            String dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
+            string dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
 
             if (!Directory.Exists(dataPath))
                 Directory.CreateDirectory(dataPath);
@@ -170,7 +170,7 @@ namespace TestExplorerPanel.Source
 
         public void CreateMenuItem()
         {
-            String label = LocalizationHelper.GetString("ViewMenuItem");
+            string label = LocalizationHelper.GetString("ViewMenuItem");
 
             ToolStripMenuItem viewMenu = (ToolStripMenuItem) PluginBase.MainForm.FindMenuItem("ViewMenu");
             ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, new EventHandler(OpenPanel));
@@ -185,7 +185,7 @@ namespace TestExplorerPanel.Source
             EventManager.AddEventHandler(commandHandler, EventType.Command);
         }
 
-        public void OpenPanel(Object sender, EventArgs e)
+        public void OpenPanel(object sender, EventArgs e)
         {
             panel.Show();
         }

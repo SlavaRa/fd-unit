@@ -91,7 +91,7 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit
             ui.SetRunTime(match.Groups[1].Value);
         }
 
-        private TestResult TestResultFromString(String result)
+        private TestResult TestResultFromString(string result)
         {
             if (result == ".")
                 return TestResult.PASSED;

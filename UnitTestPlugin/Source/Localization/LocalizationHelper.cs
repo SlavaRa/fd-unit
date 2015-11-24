@@ -11,11 +11,11 @@ namespace TestExplorerPanel.Source.Localization
 
         public static void Initialize(LocaleVersion locale)
         {
-            String path = "TestExplorerPanel.Source.Localization." + locale.ToString();
+            string path = "TestExplorerPanel.Source.Localization." + locale.ToString();
             resources = new ResourceManager(path, Assembly.GetExecutingAssembly());
         }
 
-        public static String GetString(String identifier)
+        public static string GetString(string identifier)
         {
             return resources.GetString(identifier);
         }

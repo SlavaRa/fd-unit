@@ -13,7 +13,7 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
 
         private ITraceMessageHandler implementation;
 
-        private Int32 lastLogIndex;
+        private int lastLogIndex;
 
         public TraceHandler(PluginUI pluginUI)
         {
@@ -39,7 +39,7 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
         {
             IList<TraceItem> log = TraceManager.TraceLog;
 
-            for (Int32 i = lastLogIndex; i < log.Count; i++)
+            for (int i = lastLogIndex; i < log.Count; i++)
                 implementation.ProcessMessage(log[i].Message);
 
             lastLogIndex = log.Count;
