@@ -5,41 +5,40 @@ using PluginCore.Managers;
 using TestExplorerPanel.Forms;
 using TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit;
 
-namespace TestExplorerPanel.Source.Handlers.MessageHandlers {
+namespace TestExplorerPanel.Source.Handlers.MessageHandlers
+{
+    class TraceHandler : IEventHandler
+    {
+        private readonly PluginUI ui;
+        private readonly ITraceMessageHandler implementation;
+        private int lastLogIndex;
 
-    class TraceHandler : IEventHandler {
-
-        private PluginUI ui;
-
-        private ITraceMessageHandler implementation;
-
-        private Int32 lastLogIndex;
-
-        public TraceHandler( PluginUI pluginUI ) {
-            this.ui = pluginUI;
-
-            implementation = new FlexUnitMessageHandler( pluginUI );
-
+        public TraceHandler(PluginUI pluginUi)
+        {
+            ui = pluginUi;
+            implementation = new FlexUnitMessageHandler(pluginUi);
             lastLogIndex = 0;
         }
 
-        public void HandleEvent( object sender , PluginCore.NotifyEvent e , PluginCore.HandlingPriority priority ) {
-            switch ( e.Type ) {
+        public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
+        {
+            switch (e.Type)
+            {
                 case EventType.Trace:
                     ProcessTraces();
                     ui.EndUpdate();
-                break;
+                    break;
             }
         }
 
-        private void ProcessTraces() {
+        private void ProcessTraces()
+        {
             IList<TraceItem> log = TraceManager.TraceLog;
 
-            for ( Int32 i = lastLogIndex ; i < log.Count ; i++ )
-                implementation.ProcessMessage( log[ i ].Message );
+            for (int i = lastLogIndex; i < log.Count; i++)
+                implementation.ProcessMessage(log[i].Message);
 
             lastLogIndex = log.Count;
         }
-
     }
 }

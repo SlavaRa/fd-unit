@@ -30,147 +30,177 @@ using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Localization;
 using PluginCore.Managers;
+using PluginCore.Utilities;
 using TestExplorerPanel.Forms;
 using TestExplorerPanel.Source.Handlers;
 using TestExplorerPanel.Source.Handlers.MessageHandlers;
 using TestExplorerPanel.Source.Localization;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace TestExplorerPanel.Source {
-
-    public class PluginMain : IPlugin {
-
-        #region IPlugin Constants
-
-        public int api = 1;
-        public String name = "UnitTests";
-        public String guid = "93C76C98-D991-4F19-99EE-6188D7E534E2";
-        public String help = "www.flashdevelop.org/community/";
-        public String description = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
-        public String author = "Gustavo S. Wolff";
-
-        public String settingsFilename;
-
-        #endregion
-
+namespace TestExplorerPanel.Source
+{
+    public class PluginMain : IPlugin
+    {
+        private string settingsFilename;
         private PluginUI ui;
-
         private Image image;
-
         private DockContent panel;
-
         private IEventHandler processHandler;
         private IEventHandler traceHandler;
         private IEventHandler commandHandler;
 
         #region IPlugin Getters
 
-        public int Api {
-            get { return api; }
-        }
+        /// <summary>
+        /// Api level of the plugin
+        /// </summary>
+        public int Api => 1;
 
-        public String Author {
-            get { return author; }
-        }
+        /// <summary>
+        /// Name of the plugin
+        /// </summary> 
+        public string Name => "TestExplorerPanel";
 
-        public String Description {
-            get { return description; }
-        }
+        /// <summary>
+        /// GUID of the plugin
+        /// </summary>
+        public string Guid => "93C76C98-D991-4F19-99EE-6188D7E534E2";
 
-        public String Guid {
-            get { return guid; }
-        }
+        /// <summary>
+        /// Author of the plugin
+        /// </summary> 
+        public string Author => "Gustavo S. Wolff";
 
-        public String Help {
-            get { return help; }
-        }
+        /// <summary>
+        /// Description of the plugin
+        /// </summary> 
+        public string Description { get; private set; } = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
 
-        public String Name {
-            get { return name; }
-        }
+        /// <summary>
+        /// Web address for help
+        /// </summary> 
+        public string Help => "http://www.flashdevelop.org/community/";
 
-        public Object Settings {
-            get { return settingsFilename; }
-        }
+        /// <summary>
+        /// Object that contains the settings
+        /// </summary>
+        public object Settings { get; private set; }
 
         #endregion
 
         #region IPlugin Implementation
 
-        public void Initialize() {
-            this.InitBasics();
-            this.InitLocalization();
-            this.CreatePluginPanel();
-            this.CreateMenuItem();
-            this.AddEventHandlers();
+        /// <summary>
+        /// Initializes the plugin
+        /// </summary>
+        public void Initialize()
+        {
+            InitBasics();
+            LoadSettings();
+            InitLocalization();
+            CreatePluginPanel();
+            CreateMenuItem();
+            AddEventHandlers();
         }
 
-        public void Dispose() {}
+        /// <summary>
+        /// Disposes the plugin
+        /// </summary>
+        public void Dispose() => SaveSettings();
 
-        public void HandleEvent( object sender , PluginCore.NotifyEvent e , PluginCore.HandlingPriority priority ) {
+        /// <summary>
+        /// Handles the incoming events
+        /// </summary>
+        public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
+        {
         }
 
         #endregion
 
         #region Custom Methods
 
-        public void InitBasics() {
-            String dataPath = Path.Combine( PathHelper.DataDir , nameof(TestExplorerPanel));
-
-            if ( !Directory.Exists( dataPath ) )
-                Directory.CreateDirectory( dataPath );
-
-            this.settingsFilename = Path.Combine( dataPath , "Settings.fdb" );
-
-            this.image = PluginBase.MainForm.FindImage( "101" );
+        /// <summary>
+        /// Initializes important variables
+        /// </summary>
+        void InitBasics()
+        {
+            string dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
+            if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);
+            settingsFilename = Path.Combine(dataPath, "Settings.fdb");
+            image = PluginBase.MainForm.FindImage("101");
         }
 
-        public void InitLocalization() {
+        /// <summary>
+        /// Initializes the localization of the plugin
+        /// </summary>
+        void InitLocalization()
+        {
             LocaleVersion language = PluginBase.MainForm.Settings.LocaleVersion;
-
-            switch ( language ) {
-
+            switch (language)
+            {
                 case LocaleVersion.de_DE:
                 case LocaleVersion.eu_ES:
                 case LocaleVersion.ja_JP:
                 case LocaleVersion.zh_CN:
-
+                case LocaleVersion.en_US:
                 default:
-                LocalizationHelper.Initialize( LocaleVersion.en_US );
-                break;
+                    LocalizationHelper.Initialize(LocaleVersion.en_US);
+                    break;
             }
-
-            this.description = LocalizationHelper.GetString( "Description" );
+            Description = LocalizationHelper.GetString("Description");
+        }
+        
+        /// <summary>
+        /// Creates a plugin panel for the plugin
+        /// </summary>
+        void CreatePluginPanel()
+        {
+            ui = new PluginUI() {Text = LocalizationHelper.GetString("PluginPanel")};
+            panel = PluginBase.MainForm.CreateDockablePanel(ui, Guid, image, DockState.DockRight);
+            processHandler = new ProcessEventHandler(ui);
+            traceHandler = new TraceHandler(ui);
+            commandHandler = new CommandHandler();
         }
 
-        public void CreatePluginPanel() {
-            this.ui = new PluginUI( this );
-            this.ui.Text = LocalizationHelper.GetString( "PluginPanel" );
-
-            this.panel = PluginBase.MainForm.CreateDockablePanel( this.ui , this.guid , this.image , DockState.DockRight );
-
-            this.processHandler = new ProcessEventHandler( ui );
-            this.traceHandler = new TraceHandler( ui );
-            this.commandHandler = new CommandHandler( ui );
+        /// <summary>
+        /// Creates a menu item for the plugin and adds a ignored key
+        /// </summary>
+        void CreateMenuItem()
+        {
+            string label = LocalizationHelper.GetString("ViewMenuItem");
+            ToolStripMenuItem viewMenu = (ToolStripMenuItem) PluginBase.MainForm.FindMenuItem("ViewMenu");
+            ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, OpenPanel);
+            viewMenu.DropDownItems.Add(newItem);
+        }
+        
+        /// <summary>
+        /// Adds the required event handlers
+        /// </summary> 
+        void AddEventHandlers()
+        {
+            EventManager.AddEventHandler(processHandler, EventType.ProcessStart | EventType.ProcessEnd);
+            EventManager.AddEventHandler(traceHandler, EventType.Trace);
+            EventManager.AddEventHandler(commandHandler, EventType.Command);
         }
 
-        public void CreateMenuItem() {
-            String label = LocalizationHelper.GetString( "ViewMenuItem" );
+        void OpenPanel(object sender, EventArgs e) => panel.Show();
 
-            ToolStripMenuItem viewMenu = ( ToolStripMenuItem ) PluginBase.MainForm.FindMenuItem( "ViewMenu" );
-            ToolStripMenuItem newItem = new ToolStripMenuItem( label , this.image , new EventHandler( this.OpenPanel ) );
-
-            viewMenu.DropDownItems.Add( newItem );
+        /// <summary>
+        /// Loads the plugin settings
+        /// </summary>
+        public void LoadSettings()
+        {
+            Settings = new Settings();
+            if (!File.Exists(settingsFilename)) this.SaveSettings();
+            else Settings = (Settings)ObjectSerializer.Deserialize(settingsFilename, Settings);
         }
 
-        public void AddEventHandlers() {
-            EventManager.AddEventHandler( processHandler , EventType.ProcessStart | EventType.ProcessEnd );
-            EventManager.AddEventHandler( traceHandler , EventType.Trace );
-            EventManager.AddEventHandler( commandHandler , EventType.Command );
-        }
-
-        public void OpenPanel( Object sender , System.EventArgs e ) {
-            this.panel.Show();
+        /// <summary>
+        /// Saves the plugin settings
+        /// </summary>
+        public void SaveSettings()
+        {
+            ObjectSerializer.Serialize(settingsFilename, Settings);
         }
 
         #endregion

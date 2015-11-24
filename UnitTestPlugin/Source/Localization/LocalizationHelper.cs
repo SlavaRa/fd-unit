@@ -1,21 +1,19 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Resources;
 using PluginCore.Localization;
 
-namespace TestExplorerPanel.Source.Localization {
+namespace TestExplorerPanel.Source.Localization
+{
+    class LocalizationHelper
+    {
+        private static ResourceManager resources;
 
-    class LocalizationHelper {
-
-        private static ResourceManager resources = null;
-
-        public static void Initialize( LocaleVersion locale ) {
-            String path = "TestExplorerPanel.Source.Localization." + locale.ToString();
-            resources = new ResourceManager( path , Assembly.GetExecutingAssembly() );
+        public static void Initialize(LocaleVersion locale)
+        {
+            string path = $"TestExplorerPanel.Source.Localization.{locale}";
+            resources = new ResourceManager(path, Assembly.GetExecutingAssembly());
         }
 
-        public static String GetString( String identifier ) {
-            return resources.GetString( identifier );
-        }
+        public static string GetString(string identifier) => resources.GetString(identifier);
     }
 }
