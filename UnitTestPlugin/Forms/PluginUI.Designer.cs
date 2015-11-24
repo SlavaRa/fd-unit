@@ -1,4 +1,4 @@
-﻿namespace UnitTestPlugin {
+﻿namespace TestExplorerPanel.Forms {
 
     partial class PluginUI {
         /// <summary>
@@ -30,7 +30,7 @@
             this.RunsLabel = new System.Windows.Forms.Label();
             this.ErrorsLabel = new System.Windows.Forms.Button();
             this.TestsTreeView = new System.Windows.Forms.TreeView();
-            this.TestProgress = new UnitTestPlugin.View.CustomProgressBar();
+            this.TestProgress = new CustomProgressBar();
             this.MainTable.SuspendLayout();
             this.LabelsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -165,7 +165,7 @@
         private System.Windows.Forms.TableLayoutPanel LabelsPanel;
         private System.Windows.Forms.Label RunsLabel;
         private System.Windows.Forms.TreeView TestsTreeView;
-        private UnitTestPlugin.View.CustomProgressBar TestProgress;
+        private CustomProgressBar TestProgress;
         private System.Windows.Forms.Button ErrorsLabel;
         private System.Windows.Forms.Button FailuresLabel;
 

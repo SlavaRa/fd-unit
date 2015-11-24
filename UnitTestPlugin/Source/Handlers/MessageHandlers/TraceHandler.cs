@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Globalization;
-
 using PluginCore;
 using PluginCore.Managers;
+using TestExplorerPanel.Forms;
+using TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit;
 
-using UnitTestPlugin.Model.Handlers.trace;
-using UnitTestPlugin.Model.Handlers.trace.flexunit;
-
-namespace UnitTestPlugin.Model.Handlers {
+namespace TestExplorerPanel.Source.Handlers.MessageHandlers {
 
     class TraceHandler : IEventHandler {
 

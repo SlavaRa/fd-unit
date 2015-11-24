@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "UnitTestPlugin" )]
-[assembly: AssemblyDescription( "Unit Test Plugin for FlashDevelop 4" )]
+[assembly: AssemblyTitle("TestExplorerPanel")]
+[assembly: AssemblyDescription("Test Explorer Panel for FlashDevelop 5")]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "UnitTestPlugin" )]
+[assembly: AssemblyProduct("TestExplorerPanel")]
 [assembly: AssemblyCopyright( "" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible( false )]
+[assembly: ComVisible(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid( "151b7076-4686-4657-b815-d38c1e2b597d" )]
