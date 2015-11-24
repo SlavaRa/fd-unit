@@ -36,10 +36,10 @@ using TestExplorerPanel.Source.Handlers.MessageHandlers;
 using TestExplorerPanel.Source.Localization;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace TestExplorerPanel.Source {
-
-    public class PluginMain : IPlugin {
-
+namespace TestExplorerPanel.Source
+{
+    public class PluginMain : IPlugin
+    {
         #region IPlugin Constants
 
         public int api = 1;
@@ -65,31 +65,38 @@ namespace TestExplorerPanel.Source {
 
         #region IPlugin Getters
 
-        public int Api {
+        public int Api
+        {
             get { return api; }
         }
 
-        public String Author {
+        public String Author
+        {
             get { return author; }
         }
 
-        public String Description {
+        public String Description
+        {
             get { return description; }
         }
 
-        public String Guid {
+        public String Guid
+        {
             get { return guid; }
         }
 
-        public String Help {
+        public String Help
+        {
             get { return help; }
         }
 
-        public String Name {
+        public String Name
+        {
             get { return name; }
         }
 
-        public Object Settings {
+        public Object Settings
+        {
             get { return settingsFilename; }
         }
 
@@ -97,7 +104,8 @@ namespace TestExplorerPanel.Source {
 
         #region IPlugin Implementation
 
-        public void Initialize() {
+        public void Initialize()
+        {
             this.InitBasics();
             this.InitLocalization();
             this.CreatePluginPanel();
@@ -105,71 +113,80 @@ namespace TestExplorerPanel.Source {
             this.AddEventHandlers();
         }
 
-        public void Dispose() {}
+        public void Dispose()
+        {
+        }
 
-        public void HandleEvent( object sender , PluginCore.NotifyEvent e , PluginCore.HandlingPriority priority ) {
+        public void HandleEvent(object sender, PluginCore.NotifyEvent e, PluginCore.HandlingPriority priority)
+        {
         }
 
         #endregion
 
         #region Custom Methods
 
-        public void InitBasics() {
-            String dataPath = Path.Combine( PathHelper.DataDir , nameof(TestExplorerPanel));
+        public void InitBasics()
+        {
+            String dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
 
-            if ( !Directory.Exists( dataPath ) )
-                Directory.CreateDirectory( dataPath );
+            if (!Directory.Exists(dataPath))
+                Directory.CreateDirectory(dataPath);
 
-            this.settingsFilename = Path.Combine( dataPath , "Settings.fdb" );
+            this.settingsFilename = Path.Combine(dataPath, "Settings.fdb");
 
-            this.image = PluginBase.MainForm.FindImage( "101" );
+            this.image = PluginBase.MainForm.FindImage("101");
         }
 
-        public void InitLocalization() {
+        public void InitLocalization()
+        {
             LocaleVersion language = PluginBase.MainForm.Settings.LocaleVersion;
 
-            switch ( language ) {
-
+            switch (language)
+            {
                 case LocaleVersion.de_DE:
                 case LocaleVersion.eu_ES:
                 case LocaleVersion.ja_JP:
                 case LocaleVersion.zh_CN:
 
                 default:
-                LocalizationHelper.Initialize( LocaleVersion.en_US );
-                break;
+                    LocalizationHelper.Initialize(LocaleVersion.en_US);
+                    break;
             }
 
-            this.description = LocalizationHelper.GetString( "Description" );
+            this.description = LocalizationHelper.GetString("Description");
         }
 
-        public void CreatePluginPanel() {
-            this.ui = new PluginUI( this );
-            this.ui.Text = LocalizationHelper.GetString( "PluginPanel" );
+        public void CreatePluginPanel()
+        {
+            this.ui = new PluginUI(this);
+            this.ui.Text = LocalizationHelper.GetString("PluginPanel");
 
-            this.panel = PluginBase.MainForm.CreateDockablePanel( this.ui , this.guid , this.image , DockState.DockRight );
+            this.panel = PluginBase.MainForm.CreateDockablePanel(this.ui, this.guid, this.image, DockState.DockRight);
 
-            this.processHandler = new ProcessEventHandler( ui );
-            this.traceHandler = new TraceHandler( ui );
-            this.commandHandler = new CommandHandler( ui );
+            this.processHandler = new ProcessEventHandler(ui);
+            this.traceHandler = new TraceHandler(ui);
+            this.commandHandler = new CommandHandler(ui);
         }
 
-        public void CreateMenuItem() {
-            String label = LocalizationHelper.GetString( "ViewMenuItem" );
+        public void CreateMenuItem()
+        {
+            String label = LocalizationHelper.GetString("ViewMenuItem");
 
-            ToolStripMenuItem viewMenu = ( ToolStripMenuItem ) PluginBase.MainForm.FindMenuItem( "ViewMenu" );
-            ToolStripMenuItem newItem = new ToolStripMenuItem( label , this.image , new EventHandler( this.OpenPanel ) );
+            ToolStripMenuItem viewMenu = (ToolStripMenuItem) PluginBase.MainForm.FindMenuItem("ViewMenu");
+            ToolStripMenuItem newItem = new ToolStripMenuItem(label, this.image, new EventHandler(this.OpenPanel));
 
-            viewMenu.DropDownItems.Add( newItem );
+            viewMenu.DropDownItems.Add(newItem);
         }
 
-        public void AddEventHandlers() {
-            EventManager.AddEventHandler( processHandler , EventType.ProcessStart | EventType.ProcessEnd );
-            EventManager.AddEventHandler( traceHandler , EventType.Trace );
-            EventManager.AddEventHandler( commandHandler , EventType.Command );
+        public void AddEventHandlers()
+        {
+            EventManager.AddEventHandler(processHandler, EventType.ProcessStart | EventType.ProcessEnd);
+            EventManager.AddEventHandler(traceHandler, EventType.Trace);
+            EventManager.AddEventHandler(commandHandler, EventType.Command);
         }
 
-        public void OpenPanel( Object sender , System.EventArgs e ) {
+        public void OpenPanel(Object sender, System.EventArgs e)
+        {
             this.panel.Show();
         }
 
