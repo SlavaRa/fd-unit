@@ -60,40 +60,30 @@ namespace TestExplorerPanel.Forms
         public void BeginUpdate()
         {
             TestsTreeView.Nodes.Clear();
-
             totalPassed = 0;
             totalFailed = 0;
             totalError = 0;
-
             runTime = "0";
-
             TestsTreeView.BeginUpdate();
         }
 
         public void EndUpdate()
         {
             TestsTreeView.EndUpdate();
-
             UpdateProgress();
         }
 
         public void UpdateProgress()
         {
             int totalTests = totalError + totalFailed + totalPassed;
-
-            RunsLabel.Text = "Runs: " + totalPassed + " / " + totalTests + " (" + runTime + "s)";
-            ErrorsLabel.Text = "Errors: " + totalError;
-            FailuresLabel.Text = "Failures: " + totalFailed;
-
-            if (totalTests == 0)
-            {
-                TestProgress.Value = 0;
-            }
+            RunsLabel.Text = $"Runs: {totalPassed} / {totalTests} ({runTime}s)";
+            ErrorsLabel.Text = $"Errors: {totalError}";
+            FailuresLabel.Text = $"Failures: {totalFailed}";
+            if (totalTests == 0) TestProgress.Value = 0;
             else
             {
                 TestProgress.Maximum = totalTests;
                 TestProgress.Minimum = 0;
-
                 TestProgress.Value = totalPassed;
             }
         }
@@ -107,37 +97,24 @@ namespace TestExplorerPanel.Forms
             TreeNode node = GetNode(info.Name);
             node.ToolTipText = info.Tooltip;
             node.Tag = info;
-
             SetStyleBasedOnResult(node, info.Result);
-
             AddTestResultToStatistics(info.Result);
         }
 
-        public void SetRunTime(string time)
-        {
-            runTime = time;
-        }
+        public void SetRunTime(string time) => runTime = time;
 
-        public bool IsTesting(string name)
-        {
-            return TestsTreeView.Nodes.Find(name, true).Length > 0;
-        }
+        public bool IsTesting(string name) => TestsTreeView.Nodes.Find(name, true).Length > 0;
 
         public void SetTestPathAndLine(TestInformation testInfo)
         {
             testInfo.Name = testInfo.Name.Replace('/', '.');
-
             TreeNode testNode = GetNode(testInfo.Name);
-
             TestInformation info = (TestInformation) testNode.Tag;
             info.FunctionName = testInfo.FunctionName;
             info.Path = testInfo.Path;
             info.Line = testInfo.Line;
-
             testNode.Tag = info;
-
             TreeNode errorNode = testNode.Nodes.Add(info.Tooltip);
-
             SetStyleBasedOnResult(errorNode, info.Result);
         }
 
@@ -165,32 +142,19 @@ namespace TestExplorerPanel.Forms
 
         private TreeNode GetNode(string name)
         {
-            string[] groups = name.Split('.');
-
             TreeNode lastNode = null;
-
-            foreach (string group in groups)
+            foreach (string group in name.Split('.'))
                 lastNode = GetChildrenNode(lastNode, group);
-
             return lastNode;
         }
 
         private TreeNode GetChildrenNode(TreeNode node, string name)
         {
-            TreeNodeCollection searchCollection;
-
-            if (node == null)
-                searchCollection = TestsTreeView.Nodes;
-            else
-                searchCollection = node.Nodes;
-
-            if (searchCollection.ContainsKey(name))
-                return searchCollection.Find(name, true)[0];
-
-            return searchCollection.Add(name, name);
+            var nodes = node == null ? TestsTreeView.Nodes : node.Nodes;
+            return nodes.ContainsKey(name) ? nodes.Find(name, true)[0] : nodes.Add(name, name);
         }
 
-        private void SetStyleBasedOnResult(TreeNode node, TestResult result)
+        private static void SetStyleBasedOnResult(TreeNode node, TestResult result)
         {
             switch (result)
             {
@@ -242,7 +206,7 @@ namespace TestExplorerPanel.Forms
                 info = new TestInformation();
             }
 
-            SelectTextOnFileLine(info.Path, info.Line, info.FunctionName);
+            SelectTextOnFileLine(info.Path, info.FunctionName);
         }
 
         private void OnPluginUILoad(object sender, EventArgs e)
@@ -267,22 +231,17 @@ namespace TestExplorerPanel.Forms
 
         #region Document Hightlight
 
-        private void SelectTextOnFileLine(string path, int line, string text)
+        static void SelectTextOnFileLine(string path, string text)
         {
-            if (!File.Exists(path))
-                return;
-
+            if (!File.Exists(path)) return;
             PluginBase.MainForm.OpenEditableDocument(path);
-
             ScintillaControl sci = PluginBase.MainForm.CurrentDocument.SciControl;
             sci.RemoveHighlights();
-
             List<SearchMatch> matches = GetResults(sci, text);
-
             sci.AddHighlights(matches, 0xff0000);
         }
 
-        private List<SearchMatch> GetResults(ScintillaControl sci, string text)
+        static List<SearchMatch> GetResults(ScintillaControl sci, string text)
         {
             FRSearch search = new FRSearch(text)
             {

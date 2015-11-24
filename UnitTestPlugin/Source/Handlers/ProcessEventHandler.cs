@@ -19,7 +19,6 @@ namespace TestExplorerPanel.Source.Handlers
                 case EventType.ProcessStart:
                     ui.BeginUpdate();
                     break;
-
                 case EventType.ProcessEnd:
                     ui.EndUpdate();
                     break;

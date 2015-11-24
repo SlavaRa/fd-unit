@@ -30,6 +30,7 @@ using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Localization;
 using PluginCore.Managers;
+using PluginCore.Utilities;
 using TestExplorerPanel.Forms;
 using TestExplorerPanel.Source.Handlers;
 using TestExplorerPanel.Source.Handlers.MessageHandlers;
@@ -50,55 +51,66 @@ namespace TestExplorerPanel.Source
 
         #region IPlugin Getters
 
-        public int Api
-        {
-            get { return 1; }
-        }
+        /// <summary>
+        /// Api level of the plugin
+        /// </summary>
+        public int Api => 1;
 
-        public string Author
-        {
-            get { return "Gustavo S. Wolff"; }
-        }
+        /// <summary>
+        /// Name of the plugin
+        /// </summary> 
+        public string Name => "TestExplorerPanel";
 
+        /// <summary>
+        /// GUID of the plugin
+        /// </summary>
+        public string Guid => "93C76C98-D991-4F19-99EE-6188D7E534E2";
+
+        /// <summary>
+        /// Author of the plugin
+        /// </summary> 
+        public string Author => "Gustavo S. Wolff";
+
+        /// <summary>
+        /// Description of the plugin
+        /// </summary> 
         public string Description { get; private set; } = "FlashDevelop Plugin for Unit Testing for Haxe and AS3";
 
-        public string Guid
-        {
-            get { return "93C76C98-D991-4F19-99EE-6188D7E534E2"; }
-        }
+        /// <summary>
+        /// Web address for help
+        /// </summary> 
+        public string Help => "http://www.flashdevelop.org/community/";
 
-        public string Help
-        {
-            get { return "www.flashdevelop.org/community/"; }
-        }
-
-        public string Name
-        {
-            get { return "UnitTests"; }
-        }
-
-        public object Settings
-        {
-            get { return settingsFilename; }
-        }
+        /// <summary>
+        /// Object that contains the settings
+        /// </summary>
+        public object Settings { get; private set; }
 
         #endregion
 
         #region IPlugin Implementation
 
+        /// <summary>
+        /// Initializes the plugin
+        /// </summary>
         public void Initialize()
         {
             InitBasics();
+            LoadSettings();
             InitLocalization();
             CreatePluginPanel();
             CreateMenuItem();
             AddEventHandlers();
         }
 
-        public void Dispose()
-        {
-        }
+        /// <summary>
+        /// Disposes the plugin
+        /// </summary>
+        public void Dispose() => SaveSettings();
 
+        /// <summary>
+        /// Handles the incoming events
+        /// </summary>
         public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
         {
         }
@@ -107,7 +119,10 @@ namespace TestExplorerPanel.Source
 
         #region Custom Methods
 
-        public void InitBasics()
+        /// <summary>
+        /// Initializes important variables
+        /// </summary>
+        void InitBasics()
         {
             string dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
             if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);
@@ -115,7 +130,10 @@ namespace TestExplorerPanel.Source
             image = PluginBase.MainForm.FindImage("101");
         }
 
-        public void InitLocalization()
+        /// <summary>
+        /// Initializes the localization of the plugin
+        /// </summary>
+        void InitLocalization()
         {
             LocaleVersion language = PluginBase.MainForm.Settings.LocaleVersion;
             switch (language)
@@ -131,38 +149,58 @@ namespace TestExplorerPanel.Source
             }
             Description = LocalizationHelper.GetString("Description");
         }
-
-        public void CreatePluginPanel()
+        
+        /// <summary>
+        /// Creates a plugin panel for the plugin
+        /// </summary>
+        void CreatePluginPanel()
         {
             ui = new PluginUI() {Text = LocalizationHelper.GetString("PluginPanel")};
-
-            panel = PluginBase.MainForm.CreateDockablePanel(ui, "93C76C98-D991-4F19-99EE-6188D7E534E2", image, DockState.DockRight);
-
+            panel = PluginBase.MainForm.CreateDockablePanel(ui, Guid, image, DockState.DockRight);
             processHandler = new ProcessEventHandler(ui);
             traceHandler = new TraceHandler(ui);
             commandHandler = new CommandHandler();
         }
 
-        public void CreateMenuItem()
+        /// <summary>
+        /// Creates a menu item for the plugin and adds a ignored key
+        /// </summary>
+        void CreateMenuItem()
         {
             string label = LocalizationHelper.GetString("ViewMenuItem");
-
             ToolStripMenuItem viewMenu = (ToolStripMenuItem) PluginBase.MainForm.FindMenuItem("ViewMenu");
             ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, OpenPanel);
-
             viewMenu.DropDownItems.Add(newItem);
         }
-
-        public void AddEventHandlers()
+        
+        /// <summary>
+        /// Adds the required event handlers
+        /// </summary> 
+        void AddEventHandlers()
         {
             EventManager.AddEventHandler(processHandler, EventType.ProcessStart | EventType.ProcessEnd);
             EventManager.AddEventHandler(traceHandler, EventType.Trace);
             EventManager.AddEventHandler(commandHandler, EventType.Command);
         }
 
-        public void OpenPanel(object sender, EventArgs e)
+        void OpenPanel(object sender, EventArgs e) => panel.Show();
+
+        /// <summary>
+        /// Loads the plugin settings
+        /// </summary>
+        public void LoadSettings()
         {
-            panel.Show();
+            Settings = new Settings();
+            if (!File.Exists(settingsFilename)) this.SaveSettings();
+            else Settings = (Settings)ObjectSerializer.Deserialize(settingsFilename, Settings);
+        }
+
+        /// <summary>
+        /// Saves the plugin settings
+        /// </summary>
+        public void SaveSettings()
+        {
+            ObjectSerializer.Serialize(settingsFilename, Settings);
         }
 
         #endregion

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using TestExplorerPanel.Forms;
 
 namespace TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit
@@ -24,17 +23,10 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit
 
         public void ProcessMessage(string message)
         {
-            if (testResultPattern.IsMatch(message))
-                ProcessTestResult(message);
-
-            if (testErrorPattern.IsMatch(message))
-                ProcessTestError(message);
-
-            if (testErrorFilePattern.IsMatch(message))
-                ProcessFileError(message);
-
-            if (testTimePattern.IsMatch(message))
-                ProcessTestTime(message);
+            if (testResultPattern.IsMatch(message)) ProcessTestResult(message);
+            if (testErrorPattern.IsMatch(message)) ProcessTestError(message);
+            if (testErrorFilePattern.IsMatch(message)) ProcessFileError(message);
+            if (testTimePattern.IsMatch(message)) ProcessTestTime(message);
         }
 
         private void ProcessFileError(string message)
@@ -47,8 +39,7 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit
                 Path = match.Groups[3].Value,
                 Line = int.Parse(match.Groups[4].Value)
             };
-            if (ui.IsTesting(info.FunctionName))
-                ui.SetTestPathAndLine(info);
+            if (ui.IsTesting(info.FunctionName)) ui.SetTestPathAndLine(info);
         }
 
         private void ProcessTestResult(string message)
@@ -84,7 +75,7 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers.FlexUnit
             ui.SetRunTime(match.Groups[1].Value);
         }
 
-        private TestResult TestResultFromString(string result)
+        private static TestResult TestResultFromString(string result)
         {
             return result == "." ? TestResult.Passed : TestResult.Failed;
         }
