@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using PluginCore;
+using TestExplorerPanel.Forms;
 
-using PluginCore;
-
-namespace UnitTestPlugin.Model.Handlers {
+namespace TestExplorerPanel.Source.Handlers {
 
     class CommandHandler : IEventHandler {
 

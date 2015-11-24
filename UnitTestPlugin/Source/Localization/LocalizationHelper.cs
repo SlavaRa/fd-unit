@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Text;
-using System.Resources;
 using System.Reflection;
-using System.Collections.Generic;
-
+using System.Resources;
 using PluginCore.Localization;
-using PluginCore;
 
-namespace UnitTestPlugin.Model.Localization {
+namespace TestExplorerPanel.Source.Localization {
 
     class LocalizationHelper {
 
         private static ResourceManager resources = null;
 
         public static void Initialize( LocaleVersion locale ) {
-            String path = "UnitTestPlugin.Source.Localization." + locale.ToString();
+            String path = "TestExplorerPanel.Source.Localization." + locale.ToString();
             resources = new ResourceManager( path , Assembly.GetExecutingAssembly() );
         }
 
