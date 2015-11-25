@@ -61,7 +61,7 @@ namespace TestExplorerPanel.Source.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test Explorer Panel Plugin for Flash Develop 5.
+        ///   Looks up a localized string similar to Test Explorer Panel Plugin for Flash Develop..
         /// </summary>
         public static string Description {
             get {
@@ -70,7 +70,7 @@ namespace TestExplorerPanel.Source.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test Explorer Panel.
+        ///   Looks up a localized string similar to Test Explorer.
         /// </summary>
         public static string PluginPanel {
             get {
@@ -79,7 +79,7 @@ namespace TestExplorerPanel.Source.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test Explorer Panel.
+        ///   Looks up a localized string similar to Test Explorer.
         /// </summary>
         public static string ViewMenuItem {
             get {

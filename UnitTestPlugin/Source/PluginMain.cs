@@ -135,8 +135,7 @@ namespace TestExplorerPanel.Source
         /// </summary>
         void InitLocalization()
         {
-            LocaleVersion language = PluginBase.MainForm.Settings.LocaleVersion;
-            switch (language)
+            switch (PluginBase.MainForm.Settings.LocaleVersion)
             {
                 case LocaleVersion.de_DE:
                 case LocaleVersion.eu_ES:
@@ -188,17 +187,17 @@ namespace TestExplorerPanel.Source
         /// <summary>
         /// Loads the plugin settings
         /// </summary>
-        public void LoadSettings()
+        void LoadSettings()
         {
             Settings = new Settings();
-            if (!File.Exists(settingsFilename)) this.SaveSettings();
+            if (!File.Exists(settingsFilename)) SaveSettings();
             else Settings = (Settings)ObjectSerializer.Deserialize(settingsFilename, Settings);
         }
 
         /// <summary>
         /// Saves the plugin settings
         /// </summary>
-        public void SaveSettings()
+        void SaveSettings()
         {
             ObjectSerializer.Serialize(settingsFilename, Settings);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PluginCore;
 using PluginCore.Managers;
 using TestExplorerPanel.Forms;
@@ -13,10 +12,10 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
         private readonly ITraceMessageHandler implementation;
         private int lastLogIndex;
 
-        public TraceHandler(PluginUI pluginUi)
+        public TraceHandler(PluginUI pluginUI)
         {
-            ui = pluginUi;
-            implementation = new FlexUnitMessageHandler(pluginUi);
+            ui = pluginUI;
+            implementation = new FlexUnitMessageHandler(ui);
             lastLogIndex = 0;
         }
 
@@ -25,20 +24,20 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
             switch (e.Type)
             {
                 case EventType.Trace:
+                    ui.BeginUpdate();
                     ProcessTraces();
                     ui.EndUpdate();
                     break;
             }
         }
 
-        private void ProcessTraces()
+        void ProcessTraces()
         {
             IList<TraceItem> log = TraceManager.TraceLog;
-
-            for (int i = lastLogIndex; i < log.Count; i++)
+            int logCount = log.Count;
+            for (int i = lastLogIndex; i < logCount; i++)
                 implementation.ProcessMessage(log[i].Message);
-
-            lastLogIndex = log.Count;
+            lastLogIndex = logCount;
         }
     }
 }
