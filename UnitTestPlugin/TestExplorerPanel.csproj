@@ -61,8 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Source\Handlers\CommandHandler.cs" />
-    <Compile Include="Source\Handlers\ProcessEventHandler.cs" />
     <Compile Include="Source\Handlers\MessageHandlers\FlexUnit\FlexUnitMessageHandler.cs" />
     <Compile Include="Source\Handlers\MessageHandlers\ITraceMessageHandler.cs" />
     <Compile Include="Source\Handlers\MessageHandlers\TraceHandler.cs" />

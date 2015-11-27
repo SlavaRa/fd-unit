@@ -6,11 +6,11 @@ namespace TestExplorerPanel.Source.Localization
 {
     class LocalizationHelper
     {
-        private static ResourceManager resources;
+        static ResourceManager resources;
 
         public static void Initialize(LocaleVersion locale)
         {
-            string path = $"TestExplorerPanel.Source.Localization.{locale}";
+            string path = $"{nameof(TestExplorerPanel.Source.Localization)}.{locale}";
             resources = new ResourceManager(path, Assembly.GetExecutingAssembly());
         }
 

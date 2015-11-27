@@ -32,7 +32,6 @@ using PluginCore.Localization;
 using PluginCore.Managers;
 using PluginCore.Utilities;
 using TestExplorerPanel.Forms;
-using TestExplorerPanel.Source.Handlers;
 using TestExplorerPanel.Source.Handlers.MessageHandlers;
 using TestExplorerPanel.Source.Localization;
 using WeifenLuo.WinFormsUI.Docking;
@@ -41,13 +40,11 @@ namespace TestExplorerPanel.Source
 {
     public class PluginMain : IPlugin
     {
-        private string settingsFilename;
-        private PluginUI ui;
-        private Image image;
-        private DockContent panel;
-        private IEventHandler processHandler;
-        private IEventHandler traceHandler;
-        private IEventHandler commandHandler;
+        string settingsFilename;
+        PluginUI ui;
+        Image image;
+        DockContent panel;
+        IEventHandler traceHandler;
 
         #region IPlugin Getters
 
@@ -59,7 +56,7 @@ namespace TestExplorerPanel.Source
         /// <summary>
         /// Name of the plugin
         /// </summary> 
-        public string Name => "TestExplorerPanel";
+        public string Name => nameof(TestExplorerPanel);
 
         /// <summary>
         /// GUID of the plugin
@@ -124,7 +121,7 @@ namespace TestExplorerPanel.Source
         /// </summary>
         void InitBasics()
         {
-            string dataPath = Path.Combine(PathHelper.DataDir, nameof(TestExplorerPanel));
+            string dataPath = Path.Combine(PathHelper.DataDir, Name);
             if (!Directory.Exists(dataPath)) Directory.CreateDirectory(dataPath);
             settingsFilename = Path.Combine(dataPath, "Settings.fdb");
             image = PluginBase.MainForm.FindImage("101");
@@ -135,30 +132,18 @@ namespace TestExplorerPanel.Source
         /// </summary>
         void InitLocalization()
         {
-            switch (PluginBase.MainForm.Settings.LocaleVersion)
-            {
-                case LocaleVersion.de_DE:
-                case LocaleVersion.eu_ES:
-                case LocaleVersion.ja_JP:
-                case LocaleVersion.zh_CN:
-                case LocaleVersion.en_US:
-                default:
-                    LocalizationHelper.Initialize(LocaleVersion.en_US);
-                    break;
-            }
+            LocalizationHelper.Initialize(LocaleVersion.en_US);
             Description = LocalizationHelper.GetString("Description");
         }
-        
+
         /// <summary>
         /// Creates a plugin panel for the plugin
         /// </summary>
         void CreatePluginPanel()
         {
-            ui = new PluginUI() {Text = LocalizationHelper.GetString("PluginPanel")};
+            ui = new PluginUI {Text = LocalizationHelper.GetString("PluginPanel")};
             panel = PluginBase.MainForm.CreateDockablePanel(ui, Guid, image, DockState.DockRight);
-            processHandler = new ProcessEventHandler(ui);
             traceHandler = new TraceHandler(ui);
-            commandHandler = new CommandHandler();
         }
 
         /// <summary>
@@ -171,15 +156,13 @@ namespace TestExplorerPanel.Source
             ToolStripMenuItem newItem = new ToolStripMenuItem(label, image, OpenPanel);
             viewMenu.DropDownItems.Add(newItem);
         }
-        
+
         /// <summary>
         /// Adds the required event handlers
         /// </summary> 
         void AddEventHandlers()
         {
-            EventManager.AddEventHandler(processHandler, EventType.ProcessStart | EventType.ProcessEnd);
             EventManager.AddEventHandler(traceHandler, EventType.Trace);
-            EventManager.AddEventHandler(commandHandler, EventType.Command);
         }
 
         void OpenPanel(object sender, EventArgs e) => panel.Show();
@@ -191,7 +174,7 @@ namespace TestExplorerPanel.Source
         {
             Settings = new Settings();
             if (!File.Exists(settingsFilename)) SaveSettings();
-            else Settings = (Settings)ObjectSerializer.Deserialize(settingsFilename, Settings);
+            else Settings = (Settings) ObjectSerializer.Deserialize(settingsFilename, Settings);
         }
 
         /// <summary>

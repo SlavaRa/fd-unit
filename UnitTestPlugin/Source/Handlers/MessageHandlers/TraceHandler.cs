@@ -8,9 +8,9 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
 {
     class TraceHandler : IEventHandler
     {
-        private readonly PluginUI ui;
-        private readonly ITraceMessageHandler implementation;
-        private int lastLogIndex;
+        readonly PluginUI ui;
+        readonly ITraceMessageHandler implementation;
+        int lastLogIndex;
 
         public TraceHandler(PluginUI pluginUI)
         {
@@ -25,13 +25,13 @@ namespace TestExplorerPanel.Source.Handlers.MessageHandlers
             {
                 case EventType.Trace:
                     ui.BeginUpdate();
-                    ProcessTraces();
+                    ProcessTraceLog();
                     ui.EndUpdate();
                     break;
             }
         }
 
-        void ProcessTraces()
+        void ProcessTraceLog()
         {
             IList<TraceItem> log = TraceManager.TraceLog;
             int logCount = log.Count;
